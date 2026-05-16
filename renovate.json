@@ -15,11 +15,13 @@
   "rangeStrategy": "bump",
   "rebaseLabel": "rebase",
   "rebaseWhen": "auto",
+  "minimumReleaseAge": "14 days",
   "pre-commit": {
     "enabled": true
   },
   "lockFileMaintenance": {
     "enabled": true,
+    "automerge": true,
     "schedule": [
       "before 06:00 on monday"
     ]
@@ -57,7 +59,7 @@
         "patch",
         "minor"
       ],
-      "automerge": false
+      "automerge": true
     }
   ],
   "customManagers": [
