@@ -88,8 +88,8 @@
   "customManagers": [
     {
       "customType": "regex",
-      "managerFilePatterns": [
-        "/^\\.github/workflows/[^/]+\\.ya?ml$/"
+      "fileMatch": [
+        "^\\.github/workflows/[^/]+\\.ya?ml$"
       ],
       "matchStrings": [
         "#\\s*renovate:\\s*datasource=(?<datasource>[a-z-]+?)\\s+depName=(?<depName>\\S+?)(?:\\s+versioning=(?<versioning>\\S+?))?\\s+[A-Z_]+:\\s*[\"']?(?<currentValue>[^\\s\"']+)"
@@ -97,8 +97,8 @@
     },
     {
       "customType": "regex",
-      "managerFilePatterns": [
-        "/^README\\.md$/"
+      "fileMatch": [
+        "^README\\.md$"
       ],
       "matchStrings": [
         "<!--\\s*renovate:\\s*datasource=(?<datasource>[a-z-]+?)\\s+depName=(?<depName>\\S+?)(?:\\s+versioning=(?<versioning>\\S+?))?\\s*-->(?<currentValue>[0-9][^\\s|]*)"
