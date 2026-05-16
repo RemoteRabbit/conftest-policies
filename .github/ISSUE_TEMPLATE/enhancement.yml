@@ -1,0 +1,33 @@
+name: Enhancement
+description: Improve an existing policy, the tooling, CI, or developer experience.
+title: "enhancement: <short summary>"
+labels: ["enhancement"]
+body:
+  - type: input
+    id: area
+    attributes:
+      label: Area
+      description: Which part of the repo would this change? (e.g. `policy/terraform/aws/s3`, `Makefile`, `scripts/gen-docs.sh`, CI)
+    validations:
+      required: true
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation
+      description: What problem does this solve? Who benefits?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+      description: Describe the desired behavior or API.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
