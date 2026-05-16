@@ -5,15 +5,17 @@
       "release-type": "simple",
       "package-name": "conftest-policies",
       "include-component-in-tag": false,
+      "release-as": "0.0.1",
       "changelog-sections": [
         { "type": "feat", "section": "Features" },
         { "type": "fix", "section": "Bug Fixes" },
+        { "type": "security", "section": "Security" },
         { "type": "perf", "section": "Performance" },
         { "type": "revert", "section": "Reverts" },
         { "type": "docs", "section": "Documentation" },
         { "type": "refactor", "section": "Refactors" },
         { "type": "test", "section": "Tests", "hidden": true },
-        { "type": "build", "section": "Build", "hidden": true },
+        { "type": "build", "section": "Dependencies" },
         { "type": "ci", "section": "CI", "hidden": true },
         { "type": "chore", "section": "Chores", "hidden": true }
       ]
