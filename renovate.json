@@ -3,7 +3,7 @@
   "extends": [
     "config:recommended",
     ":dependencyDashboard",
-    ":semanticCommitTypeAll(chore)"
+    ":semanticCommitTypeAll(build)"
   ],
   "timezone": "UTC",
   "schedule": [
@@ -16,6 +16,20 @@
   "rebaseLabel": "rebase",
   "rebaseWhen": "auto",
   "minimumReleaseAge": "14 days",
+  "prTitleStrict": true,
+  "commitBodyTable": true,
+  "configMigration": true,
+  "osvVulnerabilityAlerts": true,
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "automerge": false,
+    "semanticCommitType": "security",
+    "semanticCommitScope": "deps",
+    "labels": [
+      "security",
+      "dependencies"
+    ]
+  },
   "pre-commit": {
     "enabled": true
   },
@@ -31,13 +45,16 @@
       "matchManagers": [
         "github-actions"
       ],
-      "groupName": "github actions"
+      "groupName": "github actions",
+      "semanticCommitScope": "github-actions",
+      "pinDigests": true
     },
     {
       "matchManagers": [
         "pre-commit"
       ],
-      "groupName": "pre-commit hooks"
+      "groupName": "pre-commit hooks",
+      "semanticCommitScope": "pre-commit"
     },
     {
       "matchManagers": [
@@ -46,30 +63,45 @@
       "matchFileNames": [
         ".github/workflows/**"
       ],
-      "groupName": "ci tooling versions"
+      "groupName": "ci tooling versions",
+      "semanticCommitScope": "ci-tooling"
     },
     {
       "matchManagers": [
         "terraform"
       ],
-      "groupName": "terraform providers"
+      "groupName": "terraform providers",
+      "semanticCommitScope": "terraform"
     },
     {
       "matchUpdateTypes": [
         "patch",
-        "minor"
+        "minor",
+        "digest",
+        "pinDigest"
       ],
-      "automerge": true
+      "automerge": true,
+      "automergeStrategy": "squash",
+      "platformAutomerge": true
     }
   ],
   "customManagers": [
     {
       "customType": "regex",
-      "managerFilePatterns": [
-        "/^\\.github/workflows/[^/]+\\.ya?ml$/"
+      "fileMatch": [
+        "^\\.github/workflows/[^/]+\\.ya?ml$"
       ],
       "matchStrings": [
         "#\\s*renovate:\\s*datasource=(?<datasource>[a-z-]+?)\\s+depName=(?<depName>\\S+?)(?:\\s+versioning=(?<versioning>\\S+?))?\\s+[A-Z_]+:\\s*[\"']?(?<currentValue>[^\\s\"']+)"
+      ]
+    },
+    {
+      "customType": "regex",
+      "fileMatch": [
+        "^README\\.md$"
+      ],
+      "matchStrings": [
+        "<!--\\s*renovate:\\s*datasource=(?<datasource>[a-z-]+?)\\s+depName=(?<depName>\\S+?)(?:\\s+versioning=(?<versioning>\\S+?))?\\s*-->(?<currentValue>[0-9][^\\s|]*)"
       ]
     }
   ]
