@@ -6,6 +6,7 @@ rules:
     - always
     - - feat
       - fix
+      - security
       - docs
       - style
       - refactor
