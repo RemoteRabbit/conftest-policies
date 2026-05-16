@@ -6,37 +6,58 @@
     ":semanticCommitTypeAll(chore)"
   ],
   "timezone": "UTC",
-  "schedule": ["before 06:00 on monday"],
-  "labels": ["dependencies"],
+  "schedule": [
+    "before 06:00 on monday"
+  ],
+  "labels": [
+    "dependencies"
+  ],
   "rangeStrategy": "bump",
+  "minimumReleaseAge": "14 days",
   "pre-commit": {
     "enabled": true
   },
   "lockFileMaintenance": {
     "enabled": true,
-    "schedule": ["before 06:00 on monday"]
+    "automerge": true,
+    "schedule": [
+      "before 06:00 on monday"
+    ]
   },
   "packageRules": [
     {
-      "matchManagers": ["github-actions"],
+      "matchManagers": [
+        "github-actions"
+      ],
       "groupName": "github actions"
     },
     {
-      "matchManagers": ["pre-commit"],
+      "matchManagers": [
+        "pre-commit"
+      ],
       "groupName": "pre-commit hooks"
     },
     {
-      "matchManagers": ["custom.regex"],
-      "matchFileNames": [".github/workflows/**"],
+      "matchManagers": [
+        "custom.regex"
+      ],
+      "matchFileNames": [
+        ".github/workflows/**"
+      ],
       "groupName": "ci tooling versions"
     },
     {
-      "matchManagers": ["terraform"],
+      "matchManagers": [
+        "terraform"
+      ],
       "groupName": "terraform providers"
     },
     {
-      "matchUpdateTypes": ["patch", "minor"],
-      "automerge": false
+      "matchUpdateTypes": [
+        "patch",
+        "minor"
+      ],
+      "automerge": true
     }
   ],
   "customManagers": [
