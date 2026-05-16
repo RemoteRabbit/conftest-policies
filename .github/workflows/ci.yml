@@ -61,6 +61,14 @@ jobs:
       - name: Docs are up to date
         run: make docs-check
 
+      - name: Install git-cliff
+        uses: taiki-e/install-action@v2
+        with:
+          tool: git-cliff
+
+      - name: Per-domain changelogs are up to date
+        run: make changelogs-check
+
       - name: Validate fixtures plan offline
         run: |
           # Find every directory containing at least one .tf file and plan it.

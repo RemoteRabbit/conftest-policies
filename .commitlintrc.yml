@@ -24,3 +24,22 @@ rules:
   footer-max-length: [0]
   # Allow sentence-case subjects (e.g. "fix: Have release PR recheck ...").
   subject-case: [0]
+  # Scopes are optional for humans but, when present, must come from this enum.
+  # Add new scopes here (and, for policy domains, create policy/<scope>/ so the
+  # per-domain changelog generator picks them up).
+  scope-empty: [0]
+  scope-enum:
+    - 2 # error
+    - always
+    - # Policy domains (one per top-level policy/<scope>/ directory)
+      - terraform
+      - kubernetes
+      - dockerfile
+      - helm
+      # Infra / meta scopes
+      - github-actions
+      - pre-commit
+      - ci-tooling
+      - deps
+      - docs
+      - repo
