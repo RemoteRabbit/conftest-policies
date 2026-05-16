@@ -13,6 +13,8 @@
     "dependencies"
   ],
   "rangeStrategy": "bump",
+  "rebaseLabel": "rebase",
+  "rebaseWhen": "auto",
   "minimumReleaseAge": "14 days",
   "pre-commit": {
     "enabled": true
