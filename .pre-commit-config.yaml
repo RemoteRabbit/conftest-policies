@@ -1,0 +1,55 @@
+default_install_hook_types: [pre-commit, commit-msg]
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-merge-conflict
+      - id: check-added-large-files
+      - id: check-yaml
+      - id: check-json
+      - id: mixed-line-ending
+        args: [--fix=lf]
+
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.96.1
+    hooks:
+      - id: terraform_fmt
+
+  - repo: https://github.com/compilerla/conventional-pre-commit
+    rev: v3.6.0
+    hooks:
+      - id: conventional-pre-commit
+        stages: [commit-msg]
+        args:
+          - feat
+          - fix
+          - docs
+          - style
+          - refactor
+          - perf
+          - test
+          - build
+          - ci
+          - chore
+          - revert
+
+  - repo: local
+    hooks:
+      - id: conftest-verify
+        name: conftest verify (rego unit tests)
+        description: Run rego unit tests under policy/
+        entry: conftest verify -p policy/
+        language: system
+        pass_filenames: false
+        files: '^policy/.*\.rego$'
+
+      - id: gen-docs
+        name: regenerate docs/POLICIES.md
+        description: Regenerate the policy reference from OPA METADATA
+        entry: scripts/gen-docs.sh
+        language: script
+        pass_filenames: false
+        files: '^policy/.*\.rego$'

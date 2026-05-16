@@ -1,0 +1,51 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":dependencyDashboard",
+    ":semanticCommitTypeAll(chore)"
+  ],
+  "timezone": "UTC",
+  "schedule": ["before 06:00 on monday"],
+  "labels": ["dependencies"],
+  "rangeStrategy": "bump",
+  "pre-commit": {
+    "enabled": true
+  },
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["before 06:00 on monday"]
+  },
+  "packageRules": [
+    {
+      "matchManagers": ["github-actions"],
+      "groupName": "github actions"
+    },
+    {
+      "matchManagers": ["pre-commit"],
+      "groupName": "pre-commit hooks"
+    },
+    {
+      "matchManagers": ["custom.regex"],
+      "matchFileNames": [".github/workflows/**"],
+      "groupName": "ci tooling versions"
+    },
+    {
+      "matchManagers": ["terraform"],
+      "groupName": "terraform providers"
+    },
+    {
+      "matchUpdateTypes": ["patch", "minor"],
+      "automerge": false
+    }
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": ["^\\.github/workflows/[^/]+\\.ya?ml$"],
+      "matchStrings": [
+        "#\\s*renovate:\\s*datasource=(?<datasource>[a-z-]+?)\\s+depName=(?<depName>\\S+?)(?:\\s+versioning=(?<versioning>\\S+?))?\\s+[A-Z_]+:\\s*[\"']?(?<currentValue>[^\\s\"']+)"
+      ]
+    }
+  ]
+}

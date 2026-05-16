@@ -1,0 +1,58 @@
+name: Bug report
+description: A policy produces an incorrect result, the tooling misbehaves, or something is broken.
+title: "bug: <short summary>"
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for filing a bug. Please provide enough detail for us to reproduce.
+
+  - type: input
+    id: policy
+    attributes:
+      label: Affected policy / package
+      description: e.g. `terraform.aws.s3` or `scripts/gen-docs.sh`
+      placeholder: terraform.aws.s3
+    validations:
+      required: true
+
+  - type: input
+    id: versions
+    attributes:
+      label: Tool versions
+      description: Output of `conftest --version`, `terraform version`, and `opa version` if relevant.
+      placeholder: "conftest 0.56.0, terraform 1.9.8, opa 0.70.0"
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Minimal Terraform / plan JSON snippet plus the exact command you ran.
+      render: shell
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: Include the full conftest output.
+      render: shell
+    validations:
+      required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional context
+      description: Logs, screenshots, hypotheses, related issues, etc.
