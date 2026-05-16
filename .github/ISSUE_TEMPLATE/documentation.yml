@@ -1,0 +1,25 @@
+name: Documentation
+description: Report missing, incorrect, or unclear documentation.
+title: "docs: <short summary>"
+labels: ["documentation"]
+body:
+  - type: input
+    id: location
+    attributes:
+      label: Affected file or section
+      description: e.g. `README.md#local-development`, `docs/POLICIES.md`, a METADATA block.
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What's wrong or missing?
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggested change
+      description: Optional. Proposed wording or links.
