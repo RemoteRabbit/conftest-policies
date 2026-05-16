@@ -15,7 +15,7 @@ env:
   # renovate: datasource=github-releases depName=hashicorp/terraform
   TERRAFORM_VERSION: "1.15.3"
   # renovate: datasource=github-releases depName=open-policy-agent/opa
-  OPA_VERSION: "1.16.1"
+  OPA_VERSION: "1.16.2"
   # renovate: datasource=github-releases depName=orhun/git-cliff
   GIT_CLIFF_VERSION: "2.13.1"
 
