@@ -54,3 +54,11 @@ repos:
         language: script
         pass_filenames: false
         files: '^policy/.*\.rego$'
+
+      - id: hcl-policy-self-check
+        name: HCL policy self-check (fixtures)
+        description: Run HCL policies against tests/fixtures/terraform/hcl and assert expected pass/fail.
+        entry: scripts/test-fixtures.sh hcl
+        language: script
+        pass_filenames: false
+        files: '^(policy/terraform/(hcl|lib)/|tests/fixtures/terraform/hcl/).*$'

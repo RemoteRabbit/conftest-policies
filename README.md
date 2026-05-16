@@ -56,15 +56,28 @@ make test      # generate plans for every fixture and run conftest
 ## Layout
 
 ```
-policy/<domain>/<provider>/<resource>.rego        Rego policies
-policy/<domain>/<provider>/<resource>_test.rego   Rego unit tests
-tests/fixtures/<domain>/<provider>/<resource>/    Local-only Terraform fixtures
-scripts/                                          Helper scripts
+policy/terraform/lib/<area>.rego                     Shared helpers (terraform.lib.*)
+policy/terraform/hcl/<provider>/<resource>.rego      HCL (static) policies   (terraform.hcl.*)
+policy/terraform/plan/<provider>/<resource>.rego     Plan (post-plan) policies (terraform.plan.*)
+policy/terraform/{hcl,plan,lib}/.../*_test.rego      Rego unit tests
+tests/fixtures/terraform/hcl/<provider>/<resource>/{compliant,violation}/main.tf
+tests/fixtures/terraform/plan/<provider>/<resource>/{compliant,violation}/main.tf
+scripts/                                             Helper scripts
 ```
 
-Policies are namespaced (e.g. `package terraform.aws.s3`) so consumers can
-target subsets via `--namespace`. Fixture paths mirror the policy tree to make
-it obvious which fixture exercises which rule set.
+Policies come in two flavours so consumers get both fast static feedback and
+plan-aware enforcement:
+
+- **HCL** policies (`terraform.hcl.*`) run against parsed `.tf` source. Great
+  for pre-commit / PR linting; cheap, no `terraform init`/`plan` needed.
+- **Plan** policies (`terraform.plan.*`) run against `terraform show -json
+  plan.tfplan` output. Catches violations that only materialise once
+  variables, locals, modules, and data sources are resolved.
+
+Both share rule logic via `data.terraform.lib.*` so a single source of truth
+defines what e.g. "required tag" means. Fixture paths mirror the policy tree:
+each rule has a `compliant/` fixture (expected to pass) and a `violation/`
+fixture (expected to fail), which `make test` asserts.
 
 ## Local Terraform fixtures
 
@@ -73,11 +86,12 @@ backend, no cloud credentials. The AWS provider is configured with mock keys
 and `skip_*` flags so that `terraform init`/`plan` work without any account.
 **Do not `terraform apply` against these fixtures.**
 
-Generate a plan + JSON for every fixture (or one via `FIXTURE=<path>`):
+Generate a plan + JSON for every **plan** fixture (or one via `FIXTURE=<path>`).
+HCL fixtures are parsed directly by conftest and do not need a plan:
 
 ```sh
 make plan
-make plan FIXTURE=tests/fixtures/terraform/aws/s3
+make plan FIXTURE=tests/fixtures/terraform/plan/aws/s3/compliant
 ```
 
 ## Common tasks
@@ -85,12 +99,15 @@ make plan FIXTURE=tests/fixtures/terraform/aws/s3
 A self-documenting Makefile wraps the day-to-day workflow:
 
 ```sh
-make           # list targets
-make install   # install pre-commit + commit-msg hooks
-make check     # lint + rego unit tests + docs freshness (CI-equivalent local gate)
-make test      # generate plans and run conftest against every fixture
-make docs      # regenerate docs/POLICIES.md from OPA METADATA annotations
-make clean     # remove generated Terraform artifacts
+make             # list targets
+make install     # install pre-commit + commit-msg hooks
+make check       # lint + rego unit tests + docs/changelog freshness (CI-equivalent local gate)
+make test        # run both HCL and plan fixture suites
+make test-hcl    # static (HCL) policies only - no terraform plan needed
+make test-plan   # plan-based policies (generates plan.json first)
+make docs        # regenerate docs/POLICIES.md from OPA METADATA annotations
+make changelogs  # regenerate docs/changelogs/<kind>.md via git-cliff
+make clean       # remove generated Terraform artifacts
 ```
 
 Policy reference docs live at [docs/POLICIES.md](docs/POLICIES.md) and are
@@ -109,10 +126,42 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for the allowed commit types and scopes.
 Raw commands still work if you prefer:
 
 ```sh
+# Rego unit tests
 conftest verify -p policy/
-conftest test tests/fixtures/terraform/aws/s3/plan.json \
-  -p policy/ --namespace terraform.aws.s3
+
+# Static (HCL) policies against a .tf file
+conftest test tests/fixtures/terraform/hcl/aws/s3/compliant/main.tf \
+  -p policy/ --namespace terraform.hcl.aws.s3
+
+# Plan policies against plan.json
+conftest test tests/fixtures/terraform/plan/aws/s3/compliant/plan.json \
+  -p policy/ --namespace terraform.plan.aws.s3
+
+# Run every namespace (HCL + plan) at once
+conftest test path/to/input -p policy/ --all-namespaces
 ```
+
+## Consuming as a pre-commit hook
+
+Downstream repos can wire the static (HCL) checks into their own pre-commit
+config; this repo ships a [.pre-commit-hooks.yaml](.pre-commit-hooks.yaml)
+exposing two hook IDs:
+
+```yaml
+# .pre-commit-config.yaml in the consumer repo
+repos:
+  - repo: https://github.com/remoterabbit/conftest-policies
+    rev: v0.1.0   # pin to a released tag
+    hooks:
+      - id: conftest-terraform-hcl        # runs on changed .tf files
+      # - id: conftest-terraform-plan     # opt-in, manual stage, runs on plan.json
+```
+
+`conftest` must be on `PATH`; see the [install
+guide](https://www.conftest.dev/install/). The `conftest-terraform-plan` hook
+is marked `stages: [manual]` because plans are not usually committed - invoke
+it from CI with `pre-commit run conftest-terraform-plan --all-files` after
+generating `plan.json`.
 
 ## Dependency updates
 

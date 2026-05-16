@@ -74,12 +74,14 @@ jobs:
       - name: Changelogs are up to date
         run: make changelogs-check
 
-      - name: Validate fixtures plan offline
+      - name: Generate plans for plan fixtures
         run: |
-          # Find every directory containing at least one .tf file and plan it.
-          mapfile -t fixtures < <(find tests/fixtures -type f -name '*.tf' -printf '%h\n' | sort -u)
+          # Only fixtures under tests/fixtures/terraform/plan/ have full provider
+          # config and are intended for `terraform plan`. HCL fixtures are
+          # parsed directly by conftest and need no plan.
+          mapfile -t fixtures < <(find tests/fixtures/terraform/plan -type f -name 'main.tf' -printf '%h\n' | sort -u)
           if [[ ${#fixtures[@]} -eq 0 ]]; then
-            echo "No terraform fixtures found under tests/fixtures" >&2
+            echo "No plan fixtures found under tests/fixtures/terraform/plan" >&2
             exit 1
           fi
           for fixture in "${fixtures[@]}"; do
@@ -87,3 +89,6 @@ jobs:
             ./scripts/generate-plan.sh "$fixture"
             echo "::endgroup::"
           done
+
+      - name: Conftest test against fixtures (HCL + plan)
+        run: ./scripts/test-fixtures.sh all

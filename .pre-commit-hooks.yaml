@@ -1,0 +1,32 @@
+# Pre-commit hooks exposed by this repo for downstream consumers.
+#
+# Requires `conftest` on PATH: https://www.conftest.dev/install/
+#
+# Usage in a consumer .pre-commit-config.yaml:
+#
+#   repos:
+#     - repo: https://github.com/remoterabbit/conftest-policies
+#       rev: v0.1.0   # pin to a release tag
+#       hooks:
+#         - id: conftest-terraform-hcl
+#
+# The HCL hook runs against changed .tf files; the plan hook is intended for
+# manual / CI use (`pre-commit run conftest-terraform-plan --all-files`) since
+# `plan.json` is not normally committed.
+
+- id: conftest-terraform-hcl
+  name: conftest (terraform HCL policies)
+  description: Static (HCL) policy checks on Terraform .tf files. Requires conftest on PATH.
+  entry: conftest test --policy policy --all-namespaces
+  language: system
+  files: '\.tf$'
+  pass_filenames: true
+
+- id: conftest-terraform-plan
+  name: conftest (terraform plan policies)
+  description: Plan-based policy checks on Terraform plan.json files. Requires conftest on PATH.
+  entry: conftest test --policy policy --all-namespaces
+  language: system
+  files: 'plan\.json$'
+  pass_filenames: true
+  stages: [manual]
