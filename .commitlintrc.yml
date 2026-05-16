@@ -15,3 +15,11 @@ rules:
       - ci
       - chore
       - revert
+  # Renovate (and release-please) commit bodies/footers frequently contain long
+  # URLs, tables and release notes that blow past the default 100-char limit.
+  body-max-line-length: [0]
+  footer-max-line-length: [0]
+  body-max-length: [0]
+  footer-max-length: [0]
+  # Allow sentence-case subjects (e.g. "fix: Have release PR recheck ...").
+  subject-case: [0]
