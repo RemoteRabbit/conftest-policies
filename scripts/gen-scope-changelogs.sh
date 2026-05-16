@@ -57,4 +57,7 @@ for d in "${domains[@]}"; do
     --include-path "$POLICY_DIR/$d/**" \
     --include-path "$FIXTURE_DIR/$d/**" \
     --output "$OUT_DIR/$d.md"
+  # Normalize: strip trailing blank lines so pre-commit's end-of-file-fixer
+  # (which collapses them to a single trailing newline) doesn't fight us in CI.
+  printf '%s\n' "$(cat "$OUT_DIR/$d.md")" > "$OUT_DIR/$d.md"
 done
