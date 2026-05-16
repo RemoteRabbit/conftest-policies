@@ -6,6 +6,7 @@ rules:
     - always
     - - feat
       - fix
+      - security
       - docs
       - style
       - refactor
@@ -15,6 +16,14 @@ rules:
       - ci
       - chore
       - revert
+  scope-enum:
+    - 2 # error
+    - always
+    - - github-actions
+      - pre-commit
+      - ci-tooling
+      - terraform
+      - deps
   # Renovate (and release-please) commit bodies/footers frequently contain long
   # URLs, tables and release notes that blow past the default 100-char limit.
   body-max-line-length: [0]
