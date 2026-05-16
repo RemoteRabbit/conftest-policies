@@ -1,0 +1,61 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+env:
+  # renovate: datasource=github-releases depName=open-policy-agent/conftest
+  CONFTEST_VERSION: "0.56.0"
+  # renovate: datasource=github-releases depName=hashicorp/terraform
+  TERRAFORM_VERSION: "1.9.8"
+  # renovate: datasource=github-releases depName=open-policy-agent/opa
+  OPA_VERSION: "0.70.0"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
+          terraform_wrapper: false
+
+      - name: Install conftest
+        run: |
+          curl -sSL -o /tmp/conftest.tgz \
+            "https://github.com/open-policy-agent/conftest/releases/download/v${CONFTEST_VERSION}/conftest_${CONFTEST_VERSION}_Linux_x86_64.tar.gz"
+          tar -xzf /tmp/conftest.tgz -C /tmp conftest
+          sudo install -m 0755 /tmp/conftest /usr/local/bin/conftest
+          conftest --version
+
+      - name: Install opa
+        run: |
+          curl -sSL -o /tmp/opa \
+            "https://openpolicyagent.org/downloads/v${OPA_VERSION}/opa_linux_amd64_static"
+          sudo install -m 0755 /tmp/opa /usr/local/bin/opa
+          opa version
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run pre-commit
+        uses: pre-commit/action@v3.0.1
+
+      - name: Conftest verify (rego unit tests)
+        run: conftest verify -p policy/
+
+      - name: Docs are up to date
+        run: make docs-check
+
+      - name: Validate fixtures plan offline
+        run: |
+          for fixture in tests/fixtures/*/; do
+            echo "::group::$fixture"
+            ./scripts/generate-plan.sh "$fixture"
+            echo "::endgroup::"
+          done

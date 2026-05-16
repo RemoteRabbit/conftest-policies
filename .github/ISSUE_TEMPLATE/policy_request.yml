@@ -1,0 +1,81 @@
+name: New policy request
+description: Propose a new rego policy (or rule) to be added to this repo.
+title: "policy: <provider>/<resource> – <short rule name>"
+labels: ["policy", "enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Propose a new policy. The more concrete the desired behavior, the faster
+        it can be implemented and reviewed.
+
+  - type: input
+    id: namespace
+    attributes:
+      label: Target package / namespace
+      description: Where the rule should live, e.g. `terraform.aws.iam`.
+      placeholder: terraform.aws.iam
+    validations:
+      required: true
+
+  - type: input
+    id: resource
+    attributes:
+      label: Terraform resource(s) affected
+      placeholder: aws_iam_policy, aws_iam_role
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Suggested severity
+      options:
+        - low
+        - medium
+        - high
+        - critical
+    validations:
+      required: true
+
+  - type: textarea
+    id: rule
+    attributes:
+      label: Rule description
+      description: |
+        Plain-language description of what should be enforced (and why). Example:
+        "Deny any aws_iam_policy whose Statement allows `*` action on `*` resource."
+    validations:
+      required: true
+
+  - type: textarea
+    id: compliant
+    attributes:
+      label: Compliant example
+      description: Minimal Terraform that should PASS the new rule.
+      render: hcl
+    validations:
+      required: true
+
+  - type: textarea
+    id: violation
+    attributes:
+      label: Violation example
+      description: Minimal Terraform that should FAIL the new rule.
+      render: hcl
+    validations:
+      required: true
+
+  - type: textarea
+    id: remediation
+    attributes:
+      label: Suggested remediation
+      description: What guidance should appear in the policy's METADATA.custom.remediation?
+    validations:
+      required: true
+
+  - type: textarea
+    id: references
+    attributes:
+      label: References
+      description: Links to compliance docs, provider docs, related CVEs, etc.
