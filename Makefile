@@ -3,9 +3,13 @@ SHELL := /usr/bin/env bash
 
 POLICY_DIR  := policy
 FIXTURE_DIR := tests/fixtures
-FIXTURES    := $(sort $(dir $(wildcard $(FIXTURE_DIR)/*/*/*/main.tf)))
+HCL_ROOT    := $(FIXTURE_DIR)/terraform/hcl
+PLAN_ROOT   := $(FIXTURE_DIR)/terraform/plan
 
-# Run a single fixture by passing FIXTURE=tests/fixtures/terraform/aws/s3
+# Plan fixtures are <root>/<provider>/<resource>/{compliant,violation}/main.tf.
+PLAN_FIXTURES := $(sort $(dir $(wildcard $(PLAN_ROOT)/*/*/*/main.tf)))
+
+# Run a single plan fixture by passing FIXTURE=tests/fixtures/terraform/plan/aws/s3/compliant
 FIXTURE ?=
 
 .PHONY: help
@@ -35,21 +39,23 @@ verify: ## Run rego unit tests (conftest verify)
 	conftest verify -p $(POLICY_DIR)
 
 .PHONY: plan
-plan: ## Generate plan.tfplan + plan.json for all fixtures (or FIXTURE=<path>)
+plan: ## Generate plan.tfplan + plan.json for all plan fixtures (or FIXTURE=<path>)
 	@if [ -n "$(FIXTURE)" ]; then \
 		./scripts/generate-plan.sh "$(FIXTURE)"; \
 	else \
-		for f in $(FIXTURES); do ./scripts/generate-plan.sh "$$f"; done; \
+		for f in $(PLAN_FIXTURES); do ./scripts/generate-plan.sh "$$f"; done; \
 	fi
 
+.PHONY: test-hcl
+test-hcl: ## Run HCL policies against tests/fixtures/terraform/hcl
+	./scripts/test-fixtures.sh hcl
+
+.PHONY: test-plan
+test-plan: plan ## Run plan policies against tests/fixtures/terraform/plan
+	./scripts/test-fixtures.sh plan
+
 .PHONY: test
-test: plan ## Run conftest against every fixture's plan.json
-	@status=0; \
-	for f in $(FIXTURES); do \
-		echo "==> $$f"; \
-		conftest test "$${f}plan.json" -p $(POLICY_DIR) --all-namespaces || status=$$?; \
-	done; \
-	exit $$status
+test: test-hcl test-plan ## Run both HCL and plan fixture suites
 
 .PHONY: docs
 docs: ## Regenerate docs/POLICIES.md from OPA METADATA annotations
@@ -62,7 +68,7 @@ docs-check: ## Fail if docs/POLICIES.md is out of date
 		|| { echo "docs/POLICIES.md is out of date; run 'make docs'"; exit 1; }
 
 .PHONY: changelogs
-changelogs: ## Regenerate docs/changelogs/<domain>.md via git-cliff
+changelogs: ## Regenerate docs/changelogs/<kind>.md via git-cliff
 	./scripts/gen-scope-changelogs.sh
 
 .PHONY: changelogs-check

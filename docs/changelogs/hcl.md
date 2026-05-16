@@ -4,4 +4,4 @@
 ## [Unreleased]
 
 ### Bug Fixes
-- Local to remote starter push (c1a19d1)
+- Fix issues with test fixtures not running against plan (6d59e04)

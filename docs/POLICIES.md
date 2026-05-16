@@ -5,39 +5,59 @@
 This page is generated from the `# METADATA` annotations on each rule. To
 update it, edit the rego files under `policy/` and run `make docs`.
 
-## `terraform.aws.s3`
+## `terraform.hcl.aws.s3`
 
-Tagging requirements for aws_s3_bucket resources. Targets HCL documents
-(resources nested under `resource.<type>.<name>` and wrapped in a list by
-the conftest parser).
+Static (HCL) tagging requirements for aws_s3_bucket resources. These run
+against parsed Terraform source (`.tf` files) and are intended for fast
+pre-commit / PR feedback before a plan exists.
 
-
-### S3 buckets must declare an Environment tag
-
-Every aws_s3_bucket must have a non-empty `tags.Environment` value so cost
-reporting and incident response can attribute the resource.
+Usage:
+  conftest test path/to/main.tf -p policy/ --namespace terraform.hcl.aws.s3
 
 
-| | |
-|---|---|
-| **remediation** | Add `Environment = "<env>"` to the resource's `tags` map.  |
-| **resource** | aws_s3_bucket |
-| **severity** | high |
+### S3 buckets must declare required tags
 
-
-_Source: `policy/terraform/aws/s3.rego:22`_
-
-### S3 buckets must declare an Owner tag
-
-Every aws_s3_bucket must have a non-empty `tags.Owner` value identifying
-the responsible team.
+Every aws_s3_bucket must declare each required tag (Environment, Owner)
+with a non-empty string value so cost reporting and incident response
+can attribute the resource.
 
 
 | | |
 |---|---|
-| **remediation** | Add `Owner = "<team>"` to the resource's `tags` map.  |
+| **input** | hcl |
+| **remediation** | Add the missing key to the resource's `tags` map, e.g.   tags = {     Environment = "<env>"     Owner       = "<team>"   }  |
+| **required_tags** | ["Environment","Owner"] |
 | **resource** | aws_s3_bucket |
 | **severity** | high |
 
 
-_Source: `policy/terraform/aws/s3.rego:39`_
+_Source: `policy/terraform/hcl/aws/s3.rego:34`_
+
+## `terraform.plan.aws.s3`
+
+Tagging requirements for aws_s3_bucket resources, evaluated against a
+Terraform plan (JSON). Use these when variables, locals, data sources, or
+module composition mean the final tag set is only known after `plan`.
+
+Usage:
+  terraform show -json plan.tfplan > plan.json
+  conftest test plan.json -p policy/ --namespace terraform.plan.aws.s3
+
+
+### S3 buckets must declare required tags (plan)
+
+Every planned aws_s3_bucket create/update must declare each required tag
+(Environment, Owner) with a non-empty string value. Pure-delete actions
+are ignored.
+
+
+| | |
+|---|---|
+| **input** | plan |
+| **remediation** | Add the missing key to the resource's `tags` map; if the value is produced by a variable or local, ensure it is non-empty before plan.  |
+| **required_tags** | ["Environment","Owner"] |
+| **resource** | aws_s3_bucket |
+| **severity** | high |
+
+
+_Source: `policy/terraform/plan/aws/s3.rego:32`_
