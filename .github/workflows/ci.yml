@@ -51,9 +51,7 @@ jobs:
         uses: pre-commit/action@v3.0.1
 
       - name: Validate renovate.json
-        uses: rinchsan/renovate-config-validator@v0.2.0
-        with:
-          pattern: renovate.json
+        run: npx --yes --package renovate -- renovate-config-validator --strict renovate.json
 
       - name: Conftest verify (rego unit tests)
         run: conftest verify -p policy/
