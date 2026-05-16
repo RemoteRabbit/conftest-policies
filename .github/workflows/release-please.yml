@@ -44,6 +44,9 @@ jobs:
           sudo install -m 0755 /tmp/conftest /usr/local/bin/conftest
           conftest --version
 
+      - name: Verify policies before publish
+        run: conftest verify -p policy/
+
       - name: Login to GHCR
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 

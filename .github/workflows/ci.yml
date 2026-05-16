@@ -54,7 +54,13 @@ jobs:
 
       - name: Validate fixtures plan offline
         run: |
-          for fixture in tests/fixtures/*/; do
+          # Find every directory containing at least one .tf file and plan it.
+          mapfile -t fixtures < <(find tests/fixtures -type f -name '*.tf' -printf '%h\n' | sort -u)
+          if [[ ${#fixtures[@]} -eq 0 ]]; then
+            echo "No terraform fixtures found under tests/fixtures" >&2
+            exit 1
+          fi
+          for fixture in "${fixtures[@]}"; do
             echo "::group::$fixture"
             ./scripts/generate-plan.sh "$fixture"
             echo "::endgroup::"
