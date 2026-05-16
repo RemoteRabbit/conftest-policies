@@ -61,8 +61,18 @@ docs-check: ## Fail if docs/POLICIES.md is out of date
 	@git diff --exit-code -- docs/POLICIES.md \
 		|| { echo "docs/POLICIES.md is out of date; run 'make docs'"; exit 1; }
 
+.PHONY: changelogs
+changelogs: ## Regenerate docs/changelogs/<domain>.md via git-cliff
+	./scripts/gen-scope-changelogs.sh
+
+.PHONY: changelogs-check
+changelogs-check: ## Fail if any docs/changelogs/*.md is out of date
+	@./scripts/gen-scope-changelogs.sh >/dev/null
+	@git diff --exit-code -- docs/changelogs \
+		|| { echo "docs/changelogs is out of date; run 'make changelogs'"; exit 1; }
+
 .PHONY: check
-check: lint verify docs-check ## Run lint + rego unit tests + docs freshness (CI-equivalent local gate)
+check: lint verify docs-check changelogs-check ## Run lint + rego unit tests + docs/changelog freshness (CI-equivalent local gate)
 
 .PHONY: clean
 clean: ## Remove generated Terraform artifacts from fixtures

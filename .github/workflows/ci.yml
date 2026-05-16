@@ -16,12 +16,16 @@ env:
   TERRAFORM_VERSION: "1.15.3"
   # renovate: datasource=github-releases depName=open-policy-agent/opa
   OPA_VERSION: "1.16.1"
+  # renovate: datasource=github-releases depName=orhun/git-cliff
+  GIT_CLIFF_VERSION: "2.13.1"
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          fetch-depth: 0
 
       - uses: hashicorp/setup-terraform@5e8dbf3c6d9deaf4193ca7a8fb23f2ac83bb6c85 # v4
         with:
@@ -56,8 +60,19 @@ jobs:
       - name: Conftest verify (rego unit tests)
         run: conftest verify -p policy/
 
+      - name: Install git-cliff
+        run: |
+          curl -sSL -o /tmp/git-cliff.tgz \
+            "https://github.com/orhun/git-cliff/releases/download/v${GIT_CLIFF_VERSION}/git-cliff-${GIT_CLIFF_VERSION}-x86_64-unknown-linux-gnu.tar.gz"
+          tar -xzf /tmp/git-cliff.tgz -C /tmp
+          sudo install -m 0755 "/tmp/git-cliff-${GIT_CLIFF_VERSION}/git-cliff" /usr/local/bin/git-cliff
+          git-cliff --version
+
       - name: Docs are up to date
         run: make docs-check
+
+      - name: Changelogs are up to date
+        run: make changelogs-check
 
       - name: Validate fixtures plan offline
         run: |
