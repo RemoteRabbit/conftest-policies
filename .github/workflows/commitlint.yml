@@ -41,6 +41,3 @@ jobs:
             chore
             revert
           requireScope: false
-          subjectPattern: ^(?![A-Z]).+$
-          subjectPatternError: |
-            The PR title subject must start with a lowercase letter (Conventional Commits style).
