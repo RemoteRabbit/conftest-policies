@@ -1,3 +1,4 @@
+---
 name: Bug report
 description: A policy produces an incorrect result, the tooling misbehaves, or something is broken.
 title: "bug: <short summary>"

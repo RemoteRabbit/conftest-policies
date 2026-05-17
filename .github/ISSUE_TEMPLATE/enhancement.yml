@@ -1,3 +1,4 @@
+---
 name: Enhancement
 description: Improve an existing policy, the tooling, CI, or developer experience.
 title: "enhancement: <short summary>"
@@ -7,7 +8,9 @@ body:
     id: area
     attributes:
       label: Area
-      description: Which part of the repo would this change? (e.g. `policy/terraform/aws/s3`, `Makefile`, `scripts/gen-docs.sh`, CI)
+      description: >
+        Which part of the repo would this change? (e.g.
+        `policy/terraform/aws/s3`, `Makefile`, `scripts/gen-docs.sh`, CI)
     validations:
       required: true
 

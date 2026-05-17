@@ -166,7 +166,7 @@ generating `plan.json`.
 ## Dependency updates
 
 Dependencies are kept fresh by [Renovate](https://docs.renovatebot.com/).
-[renovate.json](renovate.json) covers:
+[.github/renovate.json](.github/renovate.json) covers:
 
 - GitHub Actions versions
 - Terraform providers under `tests/fixtures/`

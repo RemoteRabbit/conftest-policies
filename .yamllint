@@ -1,0 +1,23 @@
+---
+extends: default
+
+rules:
+  # GitHub Actions uses `on:` as the trigger key; yamllint reads it as
+  # the boolean `on`. Allow it explicitly.
+  truthy:
+    allowed-values: ["true", "false"]
+    check-keys: false
+
+  # Match yamlfmt's max_line_length.
+  line-length:
+    max: 120
+    allow-non-breakable-words: true
+    allow-non-breakable-inline-mappings: true
+
+  # Action-pin comments like `# v6` immediately after a SHA are conventional
+  # in GitHub Actions; one space before `#` is fine.
+  comments:
+    require-starting-space: true
+    min-spaces-from-content: 1
+
+  comments-indentation: disable

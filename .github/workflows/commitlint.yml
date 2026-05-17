@@ -1,3 +1,4 @@
+---
 name: commitlint
 
 on:
@@ -18,7 +19,7 @@ jobs:
           fetch-depth: 0
       - uses: wagoid/commitlint-github-action@v6
         with:
-          configFile: .commitlintrc.yml
+          configFile: .github/commitlint.config.yml
 
   pr-title:
     name: PR title

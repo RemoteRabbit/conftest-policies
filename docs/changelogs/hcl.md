@@ -4,4 +4,4 @@
 ## [Unreleased]
 
 ### Bug Fixes
-- Fix issues with test fixtures not running against plan (6d59e04)
+- Fix issues with test fixtures not running against plan (#24) (42a0f34)
