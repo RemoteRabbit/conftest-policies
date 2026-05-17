@@ -4,7 +4,7 @@
 # under policy/terraform/. The shared `lib` directory is excluded because it
 # carries no consumer-facing policy.
 #
-# Each changelog is driven by git-cliff with the repo-root cliff.toml and
+# Each changelog is driven by git-cliff with .github/cliff.toml and
 # --include-path filters that scope it to the matching policy + fixture paths.
 
 set -euo pipefail
@@ -46,7 +46,7 @@ fi
 for k in "${kinds[@]}"; do
   echo "==> $OUT_DIR/$k.md"
   git-cliff \
-    --config cliff.toml \
+    --config .github/cliff.toml \
     --include-path "$POLICY_BASE/$k/**" \
     --include-path "$FIXTURE_BASE/$k/**" \
     --output "$OUT_DIR/$k.md"

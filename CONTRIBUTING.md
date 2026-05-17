@@ -35,7 +35,7 @@ A breaking change is signaled with `!` after the type/scope or a
 ## Allowed scopes
 
 Scopes are enum-validated by commitlint to catch typos. If you need a new one,
-add it to `.commitlintrc.yml`.
+add it to `.github/commitlint.config.yml`.
 
 | Scope            | Used for                                                  |
 | ---------------- | --------------------------------------------------------- |
@@ -66,6 +66,6 @@ security(deps): update urllib3 to 2.2.3 [security]
 1. `make install` - installs pre-commit + commit-msg hooks (one-time).
 2. Branch, code, `make check`, `make test`.
 3. Open a PR. CI runs lint, rego unit tests, fixture plans, commitlint, and
-   `renovate.json` validation.
+   `.github/renovate.json` validation.
 4. On merge to `main`, release-please opens/updates a release PR with the next
    version + changelog. Merging that PR cuts a tagged release.

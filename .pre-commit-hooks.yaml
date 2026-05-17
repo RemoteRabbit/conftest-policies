@@ -1,3 +1,4 @@
+---
 # Pre-commit hooks exposed by this repo for downstream consumers.
 #
 # Requires `conftest` on PATH: https://www.conftest.dev/install/
