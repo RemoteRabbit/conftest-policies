@@ -58,7 +58,9 @@ EOF
         (if .annotations.custom then
           "\n| | |\n|---|---|\n" +
           ( [ .annotations.custom | to_entries[]
-              | "| **\(.key)** | \(.value | tostring | gsub("\n";" ")) |" ]
+              # Escape `[` and `]` so values like `["Environment","Owner"]`
+              # are not parsed as broken link references by strict markdown.
+              | "| **\(.key)** | \(.value | tostring | gsub("\n";" ") | gsub("\\["; "\\[") | gsub("\\]"; "\\]")) |" ]
             | join("\n") ) + "\n"
          else "" end),
         "\n_Source: `\(.location.file):\(.location.row)`_\n"

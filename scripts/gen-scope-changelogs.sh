@@ -63,7 +63,7 @@ done
   echo
   echo "Per-kind changelogs generated from git history via [git-cliff](https://git-cliff.org/),"
   echo "one file per top-level policy kind under \`$POLICY_BASE/\`."
-  echo "The top-level [CHANGELOG.md](../../CHANGELOG.md) is owned by release-please."
+  echo "The top-level [CHANGELOG.md](https://github.com/remoterabbit/conftest-policies/blob/main/CHANGELOG.md) is owned by release-please."
   echo
   for k in "${kinds[@]}"; do
     echo "- [\`$k\`](./$k.md) - \`$POLICY_BASE/$k/\` and \`$FIXTURE_BASE/$k/\`"

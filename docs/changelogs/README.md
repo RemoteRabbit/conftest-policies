@@ -3,7 +3,7 @@
 
 Per-kind changelogs generated from git history via [git-cliff](https://git-cliff.org/),
 one file per top-level policy kind under `policy/terraform/`.
-The top-level [CHANGELOG.md](../../CHANGELOG.md) is owned by release-please.
+The top-level [CHANGELOG.md](https://github.com/remoterabbit/conftest-policies/blob/main/CHANGELOG.md) is owned by release-please.
 
 - [`hcl`](./hcl.md) - `policy/terraform/hcl/` and `tests/fixtures/terraform/hcl/`
 - [`plan`](./plan.md) - `policy/terraform/plan/` and `tests/fixtures/terraform/plan/`
