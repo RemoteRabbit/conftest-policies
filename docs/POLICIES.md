@@ -26,7 +26,7 @@ can attribute the resource.
 |---|---|
 | **input** | hcl |
 | **remediation** | Add the missing key to the resource's `tags` map, e.g.   tags = {     Environment = "<env>"     Owner       = "<team>"   }  |
-| **required_tags** | ["Environment","Owner"] |
+| **required_tags** | \["Environment","Owner"\] |
 | **resource** | aws_s3_bucket |
 | **severity** | high |
 
@@ -55,7 +55,7 @@ are ignored.
 |---|---|
 | **input** | plan |
 | **remediation** | Add the missing key to the resource's `tags` map; if the value is produced by a variable or local, ensure it is non-empty before plan.  |
-| **required_tags** | ["Environment","Owner"] |
+| **required_tags** | \["Environment","Owner"\] |
 | **resource** | aws_s3_bucket |
 | **severity** | high |
 

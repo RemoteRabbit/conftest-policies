@@ -1,0 +1,25 @@
+# ---------------------------------------------------------------------------
+# Zensical project configuration.
+# Schema: https://zensical.org/docs/setup/
+# ---------------------------------------------------------------------------
+
+[project]
+site_name        = "conftest-policies"
+site_description = "OPA/Rego policies for Terraform, packaged for conftest."
+site_url         = "https://remoterabbit.github.io/conftest-policies/"
+site_author      = "RemoteRabbit"
+copyright        = "Copyright &copy; RemoteRabbit · Built with Zensical"
+docs_dir         = "docs"
+repo_name        = "remoterabbit/conftest-policies"
+repo_url         = "https://github.com/remoterabbit/conftest-policies"
+edit_uri         = "edit/main/docs/"
+
+nav = [
+  { Home = "index.md" },
+  { "Policy reference" = "POLICIES.md" },
+  { Changelogs = [
+      "changelogs/README.md",
+      { HCL  = "changelogs/hcl.md" },
+      { Plan = "changelogs/plan.md" },
+  ] },
+]

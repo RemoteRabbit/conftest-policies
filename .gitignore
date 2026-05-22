@@ -69,3 +69,11 @@ Thumbs.db
 
 # Tool binaries dropped into repo (e.g., for quick local testing)
 /bin/
+
+# Zensical build output (deployed to GitHub Pages by .github/workflows/deploy.yml)
+/site/
+
+# Python / uv
+.venv/
+__pycache__/
+*.py[cod]
