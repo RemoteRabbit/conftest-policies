@@ -9,7 +9,7 @@ authors = [{ name = "RemoteRabbit" }]
 
 dependencies = [
     "zensical==0.0.41",
-    "pymdown-extensions>=10.17.1,<12.0",
+    "pymdown-extensions>=10.21.3,<12.0",
 ]
 
 [tool.uv]
