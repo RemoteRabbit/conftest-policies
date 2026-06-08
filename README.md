@@ -9,7 +9,7 @@ policies for Terraform code and plans.
 
 | Tool                                                               | Used for                                    | CI version |
 | ------------------------------------------------------------------ | ------------------------------------------- | ---------- |
-| [terraform](https://developer.hashicorp.com/terraform/install)     | Generating plans for fixtures               | <!-- renovate: datasource=github-releases depName=hashicorp/terraform -->1.15.3 |
+| [terraform](https://developer.hashicorp.com/terraform/install)     | Generating plans for fixtures               | <!-- renovate: datasource=github-releases depName=hashicorp/terraform -->1.15.4 |
 | [conftest](https://www.conftest.dev/install/)                      | Running policies and rego unit tests        | <!-- renovate: datasource=github-releases depName=open-policy-agent/conftest -->0.68.2 |
 | [opa](https://www.openpolicyagent.org/docs/latest/#running-opa)    | Extracting METADATA for docs generation     | <!-- renovate: datasource=github-releases depName=open-policy-agent/opa -->1.16.2 |
 | [pre-commit](https://pre-commit.com/#install)                      | Lint + commit-msg hooks                     | latest     |
