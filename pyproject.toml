@@ -8,7 +8,7 @@ license = { file = "LICENSE" }
 authors = [{ name = "RemoteRabbit" }]
 
 dependencies = [
-    "zensical==0.0.41",
+    "zensical==0.0.43",
     "pymdown-extensions>=10.21.3,<12.0",
 ]
 
