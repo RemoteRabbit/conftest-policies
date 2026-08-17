@@ -9,11 +9,11 @@ concurrency:
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 env:
   # renovate: datasource=github-releases depName=open-policy-agent/conftest
-  CONFTEST_VERSION: "0.68.2"
+  CONFTEST_VERSION: "0.69.0"
   # renovate: datasource=github-releases depName=hashicorp/terraform
   TERRAFORM_VERSION: "1.15.8"
   # renovate: datasource=github-releases depName=open-policy-agent/opa
-  OPA_VERSION: "1.18.2"
+  OPA_VERSION: "1.19.0"
 jobs:
   test:
     runs-on: ubuntu-latest
