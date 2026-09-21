@@ -11,9 +11,9 @@ env:
   # renovate: datasource=github-releases depName=open-policy-agent/conftest
   CONFTEST_VERSION: "0.69.0"
   # renovate: datasource=github-releases depName=hashicorp/terraform
-  TERRAFORM_VERSION: "1.16.0"
+  TERRAFORM_VERSION: "1.16.1"
   # renovate: datasource=github-releases depName=open-policy-agent/opa
-  OPA_VERSION: "1.20.1"
+  OPA_VERSION: "1.20.2"
 jobs:
   test:
     runs-on: ubuntu-latest
