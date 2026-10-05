@@ -12,9 +12,9 @@ permissions:
 
 env:
   # renovate: datasource=github-releases depName=open-policy-agent/conftest
-  CONFTEST_VERSION: "0.70.0"
+  CONFTEST_VERSION: "0.70.1"
   # renovate: datasource=github-releases depName=orhun/git-cliff
-  GIT_CLIFF_VERSION: "2.14.1"
+  GIT_CLIFF_VERSION: "2.14.2"
 
 jobs:
   release-please:
